@@ -39,4 +39,28 @@ router.get("/:commentId", (req, res) => {
     });
 });
 
+// endpoint to post a comment
+router.post("/", (req, res) => {
+  if (!req.body.text) {
+    return res.status(400).json({
+      message: "Text field cannot be empty."
+    });
+  }
+
+  const newComment = {
+    text: req.body.text,
+    post_id: req.params.id
+  };
+
+  db.insertComment(newComment)
+    .then(data => {
+      res.status(201).json(data);
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: "Error posting comment: Could not find the corresponding post."
+      });
+    });
+});
+
 module.exports = router;
