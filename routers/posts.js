@@ -43,4 +43,28 @@ router.get("/:id", (req, res) => {
     });
 });
 
+// endpoint to add a post to the posts array
+router.post("/", (req, res) => {
+  if (!req.body.title || !req.body.contents) {
+    return res.status(400).json({
+      message: "Invalid post"
+    });
+  }
+
+  const newPost = {
+    title: req.body.title,
+    contents: req.body.contents
+  };
+
+  db.insert(newPost)
+    .then(post => {
+      res.status(201).json(post);
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: "Error adding the post"
+      });
+    });
+});
+
 module.exports = router;
