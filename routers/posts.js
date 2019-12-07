@@ -24,4 +24,23 @@ router.get("/", (req, res) => {
     });
 });
 
+// endpoint to grab a specific post by id
+router.get("/:id", (req, res) => {
+  db.findById(req.params.id)
+    .then(post => {
+      if (post.length > 1) {
+        res.status(200).json(post);
+      } else {
+        res.status(404).json({
+          message: "Post not found"
+        });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({
+        message: "Error retrieving the post"
+      });
+    });
+});
+
 module.exports = router;
